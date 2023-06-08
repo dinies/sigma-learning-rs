@@ -15,10 +15,11 @@ fn main() {
         threshold: 0, numbers: vec![1,2,3,4]
     };
     let data: DecreasingNumbersData= DecreasingNumbersData{action:1000};
+    let initial_node: NodeG= NodeG { data, children: Vec::new() };
 
-    let tree = TreeG<DecreasingNumbers>{system: state, root: None};
+    let mut tree = TreeG::<DecreasingNumbers>{system: state, root: initial_node};
     tree.expand_tree();
-    println!("{}",tree.visit_rec(tree, 0));
+    println!("{}",tree.visit());
 }
 
 

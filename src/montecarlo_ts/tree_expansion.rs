@@ -130,12 +130,11 @@ impl DecreasingNumbers {
 
 }
 
-impl SystemLike for DecreasingNumbers{
-    type ActionG = usize;
-    fn get_possible_actions(&self) -> &[Self::ActionG]{
+impl SystemLike<usize> for DecreasingNumbers{
+    fn get_possible_actions(&self) -> &[usize]{
         self.numbers.as_slice()
     }
-    fn evolve(&mut self, action: Self::ActionG){
+    fn evolve(&mut self, action: usize){
         let mut new_numbers = self.numbers.to_owned();
         new_numbers.retain(|&x| x < action);
         self.numbers= new_numbers;
@@ -168,12 +167,11 @@ impl IncreasingNumbers {
 
 }
 
-impl SystemLike for IncreasingNumbers{
-    type ActionG = usize;
-    fn get_possible_actions(&self) -> &[Self::ActionG]{
+impl SystemLike<usize> for IncreasingNumbers{
+    fn get_possible_actions(&self) -> &[usize]{
         self.numbers.as_slice()
     }
-    fn evolve(&mut self, action: Self::ActionG){
+    fn evolve(&mut self, action: usize){
         let mut new_numbers = self.numbers.to_owned();
         new_numbers.retain(|&x| x > action);
         self.numbers = new_numbers;
@@ -216,10 +214,9 @@ impl SystemLike for IncreasingNumbers{
 
 
 
-pub trait SystemLike{
-    type ActionG;
-    fn get_possible_actions(&self) -> &[Self::ActionG];
-    fn evolve(&mut self, action: Self::ActionG);
+pub trait SystemLike<Action>{
+    fn get_possible_actions(&self) -> &[Action];
+    fn evolve(&mut self, action: Action);
     fn is_finished(&self) -> bool;
     fn get_multiplicity(&self) -> usize;
 }
@@ -237,29 +234,33 @@ pub struct NodeG {
     pub children: Vec<Box<NodeG>>,
 }
 impl NodeG{
-    pub fn visit(&self) -> String {
-        String::from(self.data.action.to_string())
+    pub fn visit(&self) -> usize {
+        self.data.action
     }
 }
 
-pub struct TreeG<System: SystemLike>{
-    system: System,
-    root: NodeG,
+pub struct TreeG<System: SystemLike<usize> >{
+    pub system: System,
+    pub root: NodeG,
 }
 
 
-impl<System> TreeG<System>
+// pub struct DecreasingNumbersDataG<Action> {
+//     pub action: Action,
+// }
+
+impl<System > TreeG<System>
     where
-        System: SystemLike + Clone,
+        System: SystemLike<usize> + Clone,
 {
-    fn expand_tree(&mut self){
-        self.root = TreeG::expand_tree_rec( self.system, DecreasingNumbersData{action:1001} )
+    pub fn expand_tree(&mut self){
+        self.root = TreeG::expand_tree_rec( &mut self.system, DecreasingNumbersData { action: 1001 })
 
     }
     fn expand_tree_rec(
-        state: System,
+        state: &mut System,
         data: DecreasingNumbersData,
-    ) -> NodeG {
+     ) -> NodeG {
         if state.is_finished() {
             return NodeG {
                 data,
@@ -268,33 +269,33 @@ impl<System> TreeG<System>
         }
 
         let mut children: Vec<Box<NodeG>> = Vec::with_capacity(state.get_multiplicity());
-        let possible_actions: &[System::ActionG] = state.get_possible_actions();
+        let possible_actions: &[usize] = state.get_possible_actions();
         for action in possible_actions {
             let mut child_state : System = state.clone();
             child_state.evolve(*action);
             children.push(Box::new(TreeG::expand_tree_rec(
-                child_state,
+                &mut child_state,
                 DecreasingNumbersData{ action: *action },
             )));
         }
         NodeG { data, children }
     }
-    fn visit(& self) -> String{
-        TreeG::<System>::visit_rec(self.root, 0)
+    pub fn visit(& self) -> String{
+        TreeG::<System>::visit_rec(& self.root, 0)
     }
-    fn visit_rec(node: NodeG, level: usize) -> String {
+    fn visit_rec(node:& NodeG, level: usize) -> String {
         let mut s: String = String::new();
         for _ in 0..level{
             s.push_str("---");
         }
-        s.push_str( &node.visit());
+        s.push_str( &node.visit().to_string());
         s.push('\n');
         if node.children.is_empty(){
             s
         }
         else{
-            for child in node.children{
-                s.push_str( &TreeG::<System>::visit_rec( *child, level+1));
+            for child in &node.children{
+                s.push_str( &TreeG::<System>::visit_rec( &*child, level+1));
             }
             s
         }
