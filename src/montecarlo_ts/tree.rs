@@ -63,63 +63,60 @@ where
     }
 }
 
-
 //Less generic code
 
-pub struct NodeDN {
-    pub data: DecreasingNumbersData,
-    pub children: Vec<Box<NodeDN>>,
-}
+// pub struct NodeDN {
+//     pub data: DecreasingNumbersData,
+//     pub children: Vec<Box<NodeDN>>,
+// }
 
-pub struct Tree {
-    pub root: NodeDN,
-}
-impl NodeDN {
-    pub fn visit(&self) -> String {
-        self.data.action.to_string()
-    }
-}
+// pub struct Tree {
+//     pub root: NodeDN,
+// }
+// impl NodeDN {
+//     pub fn visit(&self) -> String {
+//         self.data.action.to_string()
+//     }
+// }
 
-impl Tree {
-    pub fn expand_decreasing_numbers_tree_rec(
-        state: DecreasingNumbers,
-        data: DecreasingNumbersData,
-    ) -> NodeDN {
-        if state.is_finished() {
-            return NodeDN {
-                data,
-                children: Vec::new(),
-            };
-        }
+// impl Tree {
+//     pub fn expand_decreasing_numbers_tree_rec(
+//         state: DecreasingNumbers,
+//         data: DecreasingNumbersData,
+//     ) -> NodeDN {
+//         if state.is_finished() {
+//             return NodeDN {
+//                 data,
+//                 children: Vec::new(),
+//             };
+//         }
 
-        let mut children: Vec<Box<NodeDN>> = Vec::with_capacity(state.get_multiplicity());
-        let possible_actions: &[usize] = state.get_possible_actions();
-        for action in possible_actions {
-            let mut child_state: DecreasingNumbers = state.clone();
-            child_state.evolve(*action);
-            children.push(Box::new(Tree::expand_decreasing_numbers_tree_rec(
-                child_state,
-                DecreasingNumbersData { action: *action },
-            )));
-        }
-        NodeDN { data, children }
-    }
-    pub fn visit_rec(node: NodeDN, level: usize) -> String {
-        let mut s: String = String::new();
-        for _ in 0..level {
-            s.push_str("---");
-        }
-        s.push_str(&node.visit());
-        s.push('\n');
-        if node.children.is_empty() {
-            s
-        } else {
-            for child in node.children {
-                s.push_str(&Tree::visit_rec(*child, level + 1));
-            }
-            s
-        }
-    }
-}
-
-
+//         let mut children: Vec<Box<NodeDN>> = Vec::with_capacity(state.get_multiplicity());
+//         let possible_actions: &[usize] = state.get_possible_actions();
+//         for action in possible_actions {
+//             let mut child_state: DecreasingNumbers = state.clone();
+//             child_state.evolve(*action);
+//             children.push(Box::new(Tree::expand_decreasing_numbers_tree_rec(
+//                 child_state,
+//                 DecreasingNumbersData { action: *action },
+//             )));
+//         }
+//         NodeDN { data, children }
+//     }
+//     pub fn visit_rec(node: NodeDN, level: usize) -> String {
+//         let mut s: String = String::new();
+//         for _ in 0..level {
+//             s.push_str("---");
+//         }
+//         s.push_str(&node.visit());
+//         s.push('\n');
+//         if node.children.is_empty() {
+//             s
+//         } else {
+//             for child in node.children {
+//                 s.push_str(&Tree::visit_rec(*child, level + 1));
+//             }
+//             s
+//         }
+//     }
+// }

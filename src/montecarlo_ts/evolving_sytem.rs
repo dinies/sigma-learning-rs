@@ -90,8 +90,6 @@ pub enum Systems {
 //     pub action: (usize, usize),
 // }
 
-
-
 // pub trait StateAction<Action> {
 //     fn get_possible_actions() -> Vec<Action>;
 //     fn evolve(&self, action: Action) -> Self;
@@ -120,14 +118,9 @@ pub enum Systems {
 //     root: Option<Node<NodeData>>
 // }
 
-
-
-
-
 // pub struct DecreasingNumbersDataG<Action> {
 //     pub action: Action,
 // }
-
 
 //TODO: GENERIC IMPLEMENTATION
 
@@ -172,5 +165,3 @@ pub enum Systems {
 //         Node<HexgameData>( HexgameData(last_action), children )
 //     }
 // }
-
-
