@@ -8,7 +8,7 @@ fn main() {
         threshold: 0,
         numbers: vec![1, 2, 3, 4],
     };
-    let data: DecreasingNumbersData = DecreasingNumbersData { action: 1000 };
+    let data: Data = Data { action: 1000 };
     let initial_node: NodeG = NodeG {
         data,
         children: Vec::new(),
@@ -26,7 +26,7 @@ fn main() {
         threshold: 10,
         numbers: vec![3, 1, 4, 12, 8, 7 ],
     };
-    let data: IncreasingNumbersData = IncreasingNumbersData { action: 2000 };
+    let data: Data = Data { action: 3000 };
     let initial_node: NodeG = NodeG {
         data,
         children: Vec::new(),
@@ -39,13 +39,11 @@ fn main() {
     tree.expand_tree();
     println!("{}", tree.visit());
 
-
-
     //DEPRECATED less generic case
     // let state: DecreasingNumbers= DecreasingNumbers{
     //     threshold: 0, numbers: vec![1,2,3,4]
     // };
-    // let data: DecreasingNumbersData= DecreasingNumbersData{action:1000};
+    // let data: Data= Data{action:1000};
 
     // let tree : NodeDN = Tree::expand_decreasing_numbers_tree_rec( state, data);
     // println!("{}",Tree::visit_rec(tree, 0));

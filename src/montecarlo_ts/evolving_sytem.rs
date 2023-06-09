@@ -1,6 +1,6 @@
 // use hexgame_rs::hexgame::game::Game;
 
-pub struct DecreasingNumbersData {
+pub struct Data{
     pub action: usize,
 }
 
@@ -37,10 +37,6 @@ impl SystemLike<usize> for DecreasingNumbers {
     fn get_multiplicity(&self) -> usize {
         self.numbers.len()
     }
-}
-
-pub struct IncreasingNumbersData {
-    pub action: usize,
 }
 
 #[derive(Clone)]

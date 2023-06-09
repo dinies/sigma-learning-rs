@@ -1,7 +1,7 @@
 use super::evolving_sytem::*;
 
 pub struct NodeG {
-    pub data: DecreasingNumbersData,
+    pub data: Data,
     pub children: Vec<Box<NodeG>>,
 }
 impl NodeG {
@@ -20,9 +20,9 @@ where
     System: SystemLike<usize> + Clone,
 {
     pub fn expand_tree(&mut self) {
-        self.root = TreeG::expand_tree_rec(&mut self.system, DecreasingNumbersData { action: 1001 })
+        self.root = TreeG::expand_tree_rec(&mut self.system, Data { action: 1001 })
     }
-    fn expand_tree_rec(state: &mut System, data: DecreasingNumbersData) -> NodeG {
+    fn expand_tree_rec(state: &mut System, data: Data) -> NodeG {
         if state.is_finished() {
             return NodeG {
                 data,
@@ -37,7 +37,7 @@ where
             child_state.evolve(*action);
             children.push(Box::new(TreeG::expand_tree_rec(
                 &mut child_state,
-                DecreasingNumbersData { action: *action },
+                Data { action: *action },
             )));
         }
         NodeG { data, children }
@@ -66,7 +66,7 @@ where
 //Less generic code
 
 // pub struct NodeDN {
-//     pub data: DecreasingNumbersData,
+//     pub data: Data,
 //     pub children: Vec<Box<NodeDN>>,
 // }
 
@@ -82,7 +82,7 @@ where
 // impl Tree {
 //     pub fn expand_decreasing_numbers_tree_rec(
 //         state: DecreasingNumbers,
-//         data: DecreasingNumbersData,
+//         data: Data,
 //     ) -> NodeDN {
 //         if state.is_finished() {
 //             return NodeDN {
@@ -98,7 +98,7 @@ where
 //             child_state.evolve(*action);
 //             children.push(Box::new(Tree::expand_decreasing_numbers_tree_rec(
 //                 child_state,
-//                 DecreasingNumbersData { action: *action },
+//                 Data { action: *action },
 //             )));
 //         }
 //         NodeDN { data, children }
