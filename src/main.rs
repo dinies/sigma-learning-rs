@@ -9,30 +9,29 @@ fn main() {
         numbers: vec![1, 2, 3, 4],
     };
     let data: Data = Data { action: 1000 };
-    let initial_node: NodeG = NodeG {
+    let initial_node: Node = Node {
         data,
         children: Vec::new(),
     };
 
-    let mut tree = TreeG {
+    let mut tree = Tree {
         system: state,
         root: initial_node,
     };
     tree.expand_tree();
     println!("{}", tree.visit());
 
-
-    let state: IncreasingNumbers = IncreasingNumbers{
+    let state: IncreasingNumbers = IncreasingNumbers {
         threshold: 10,
-        numbers: vec![3, 1, 4, 12, 8, 7 ],
+        numbers: vec![3, 1, 4, 12, 8, 7],
     };
     let data: Data = Data { action: 3000 };
-    let initial_node: NodeG = NodeG {
+    let initial_node: Node = Node {
         data,
         children: Vec::new(),
     };
 
-    let mut tree = TreeG {
+    let mut tree = Tree {
         system: state,
         root: initial_node,
     };

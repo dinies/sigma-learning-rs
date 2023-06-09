@@ -1,51 +1,51 @@
 use super::evolving_sytem::*;
 
-pub struct NodeG {
+pub struct Node {
     pub data: Data,
-    pub children: Vec<Box<NodeG>>,
+    pub children: Vec<Box<Node>>,
 }
-impl NodeG {
+impl Node {
     pub fn visit(&self) -> usize {
         self.data.action
     }
 }
 
-pub struct TreeG<System: SystemLike<usize>> {
+pub struct Tree<System: SystemLike<usize>> {
     pub system: System,
-    pub root: NodeG,
+    pub root: Node,
 }
 
-impl<System> TreeG<System>
+impl<System> Tree<System>
 where
     System: SystemLike<usize> + Clone,
 {
     pub fn expand_tree(&mut self) {
-        self.root = TreeG::expand_tree_rec(&mut self.system, Data { action: 1001 })
+        self.root = Tree::expand_tree_rec(&mut self.system, Data { action: 1001 })
     }
-    fn expand_tree_rec(state: &mut System, data: Data) -> NodeG {
+    fn expand_tree_rec(state: &mut System, data: Data) -> Node {
         if state.is_finished() {
-            return NodeG {
+            return Node {
                 data,
                 children: Vec::new(),
             };
         }
 
-        let mut children: Vec<Box<NodeG>> = Vec::with_capacity(state.get_multiplicity());
+        let mut children: Vec<Box<Node>> = Vec::with_capacity(state.get_multiplicity());
         let possible_actions: &[usize] = state.get_possible_actions();
         for action in possible_actions {
             let mut child_state: System = state.clone();
             child_state.evolve(*action);
-            children.push(Box::new(TreeG::expand_tree_rec(
+            children.push(Box::new(Tree::expand_tree_rec(
                 &mut child_state,
                 Data { action: *action },
             )));
         }
-        NodeG { data, children }
+        Node { data, children }
     }
     pub fn visit(&self) -> String {
-        TreeG::<System>::visit_rec(&self.root, 0)
+        Tree::<System>::visit_rec(&self.root, 0)
     }
-    fn visit_rec(node: &NodeG, level: usize) -> String {
+    fn visit_rec(node: &Node, level: usize) -> String {
         let mut s: String = String::new();
         for _ in 0..level {
             s.push_str("---");
@@ -56,7 +56,7 @@ where
             s
         } else {
             for child in node.children.iter() {
-                s.push_str(&TreeG::<System>::visit_rec(child, level + 1));
+                s.push_str(&Tree::<System>::visit_rec(child, level + 1));
             }
             s
         }

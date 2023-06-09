@@ -1,6 +1,6 @@
 // use hexgame_rs::hexgame::game::Game;
 
-pub struct Data{
+pub struct Data {
     pub action: usize,
 }
 
