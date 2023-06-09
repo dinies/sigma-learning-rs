@@ -2,6 +2,14 @@
 name = "sigma_learning_rs"
 version = "0.1.0"
 edition = "2021"
+authors = ["Edoardo Ghini <edoardo.ghini@live.it>"]
+description = "Reinforcement learning library that tackles state based systems"
+homepage = "https://github.com/dinies/sigma_learning_rs"
+repository = "https://github.com/dinies/sigma_learning_rs"
+license = "MIT"
+keywords = ["tree", "monetecarlo", "algorithms"]
+categories = ["reinforcement-learning"]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

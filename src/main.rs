@@ -1,6 +1,7 @@
 // use hexgame_rs::hexgame::game::Game;
 
-use sigma_learning_rs::montecarlo_ts::tree_expansion::*;
+use sigma_learning_rs::montecarlo_ts::tree::*;
+use sigma_learning_rs::montecarlo_ts::evolving_sytem::*;
 fn main() {
     // let state: DecreasingNumbers= DecreasingNumbers{
     //     threshold: 0, numbers: vec![1,2,3,4]
