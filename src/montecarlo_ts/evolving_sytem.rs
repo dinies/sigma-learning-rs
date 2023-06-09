@@ -39,6 +39,10 @@ impl SystemLike<usize> for DecreasingNumbers {
     }
 }
 
+pub struct IncreasingNumbersData {
+    pub action: usize,
+}
+
 #[derive(Clone)]
 pub struct IncreasingNumbers {
     pub threshold: usize,

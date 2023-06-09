@@ -21,6 +21,26 @@ fn main() {
     tree.expand_tree();
     println!("{}", tree.visit());
 
+
+    let state: IncreasingNumbers = IncreasingNumbers{
+        threshold: 10,
+        numbers: vec![3, 1, 4, 12, 8, 7 ],
+    };
+    let data: IncreasingNumbersData = IncreasingNumbersData { action: 2000 };
+    let initial_node: NodeG = NodeG {
+        data,
+        children: Vec::new(),
+    };
+
+    let mut tree = TreeG {
+        system: state,
+        root: initial_node,
+    };
+    tree.expand_tree();
+    println!("{}", tree.visit());
+
+
+
     //DEPRECATED less generic case
     // let state: DecreasingNumbers= DecreasingNumbers{
     //     threshold: 0, numbers: vec![1,2,3,4]
