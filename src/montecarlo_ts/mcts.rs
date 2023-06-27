@@ -37,18 +37,26 @@ impl MonteCarloTreeSearch{
 
     }
     fn execute_search_rec( self,  node:&mut MontecarloNode<MontecarloData>, system: impl SystemLike<usize> + Clone) {
+        if system.is_finished() {
+            //get final score and use it to update w
+
+        }
         let actions = system.get_possible_actions();
-        let action = usize::MAX; //policy.chooseAction( actions )
+        let chosen_action = usize::MAX; //policy.chooseAction( actions )
         let mut new_system = system.clone();
+        new_system.evolve( chosen_action);
         //if this action has already been chosen, continue the recursion on the corresponding child
-        //let child = find if action is same in children//
-        //else create a new child and recur on it
-        let child = MontecarloNode::<MontecarloData>::new();
 
-
-        node.children.append(Box::new(&mut child));
-        new_system.evolve( action);
-        self.execute_search_rec( &mut child ,new_system );
+        match node.children.iter().find(|child| child.data.action == chosen_action){
+            Some(child) => {
+                self.execute_search_rec( &mut child ,new_system );
+            },
+            None =>{
+                let child = MontecarloNode::<MontecarloData>::new();
+                node.children.push(Box::new(&mut child));
+                self.execute_search_rec( &mut child ,new_system );
+            },
+        }
         // w_0, n_0, p_0
         // for child in node.children:
         //      update w_0, n_0, p_0
