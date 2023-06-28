@@ -28,15 +28,15 @@ impl Constructible for MontecarloData{
 }
 
 pub struct MonteCarloTreeSearch{
-    root: MontecarloNode<MontecarloData>,
+    root: Box<MontecarloNode<MontecarloData>>,
 }
 
 impl MonteCarloTreeSearch{
-    pub fn execute_search(&self, system: impl SystemLike<usize> + Clone){
+    pub fn execute_search(&mut self, system: impl SystemLike<usize> + Clone){
         self.execute_search_rec( &mut self.root,system );
 
     }
-    fn execute_search_rec( self,  node:&mut MontecarloNode<MontecarloData>, system: impl SystemLike<usize> + Clone) {
+    fn execute_search_rec( self,  node:&mut Box<MontecarloNode<MontecarloData>>, system: impl SystemLike<usize> + Clone) {
         if system.is_finished() {
             //get final score and use it to update w
 
@@ -48,13 +48,13 @@ impl MonteCarloTreeSearch{
         //if this action has already been chosen, continue the recursion on the corresponding child
 
         match node.children.iter().find(|child| child.data.action == chosen_action){
-            Some(child) => {
+            Some(mut child) => {
                 self.execute_search_rec( &mut child ,new_system );
             },
             None =>{
-                let child = MontecarloNode::<MontecarloData>::new();
-                node.children.push(Box::new(&mut child));
+                let mut child = Box::new(MontecarloNode::<MontecarloData>::new());
                 self.execute_search_rec( &mut child ,new_system );
+                node.children.push(child);
             },
         }
         // w_0, n_0, p_0
@@ -64,6 +64,14 @@ impl MonteCarloTreeSearch{
         // node.data
     }
 }
+
+   // let mut child_state: System = state.clone();
+   //          child_state.evolve(*action);
+   //          children.push(Box::new(Tree::expand_tree_rec(
+   //              &mut child_state,
+   //              Data { action: *action },
+   //          )));
+   //      }
 
 
 
