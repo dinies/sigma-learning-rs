@@ -1,17 +1,14 @@
 use super::evolving_sytem::SystemLike;
 
-pub trait Constructible {
-    fn new() -> Self;
-}
 
-pub struct MontecarloNode<D: Constructible>{
+pub struct MontecarloNode<D: Default>{
     pub data:D,
     pub children: Vec<Box<MontecarloNode<D>>>,
 }
 
-impl<D: Constructible> MontecarloNode<D>{
-    pub fn new() -> Self {
-        Self { data: D::new(), children: Vec::new() }
+impl<D: Default> Default for MontecarloNode<D>{
+    fn default() -> Self {
+        Self { data: D::default(), children: Vec::new() }
     }
 }
 
@@ -21,8 +18,8 @@ pub struct MontecarloData{
     p: f64,
     action: usize
 }
-impl Constructible for MontecarloData{
-    fn new()-> Self{
+impl Default for MontecarloData{
+    fn default()-> Self{
         Self { n: 0, w: 0.0, p: 0.0 , action: usize::MAX}
     }
 }
@@ -52,7 +49,7 @@ impl MonteCarloTreeSearch{
                 MonteCarloTreeSearch::execute_search_rec( child ,new_system );
             },
             None =>{
-                let mut child = Box::new(MontecarloNode::<MontecarloData>::new());
+                let mut child = Box::<MontecarloNode::<MontecarloData>>::default();
                 MonteCarloTreeSearch::execute_search_rec( &mut child ,new_system );
                 node.children.push(child);
             },
