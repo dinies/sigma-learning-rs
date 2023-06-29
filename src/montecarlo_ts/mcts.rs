@@ -33,10 +33,10 @@ pub struct MonteCarloTreeSearch{
 
 impl MonteCarloTreeSearch{
     pub fn execute_search(&mut self, system: impl SystemLike<usize> + Clone){
-        self.execute_search_rec( &mut self.root,system );
+        MonteCarloTreeSearch::execute_search_rec( &mut self.root ,system );
 
     }
-    fn execute_search_rec( self,  node:&mut Box<MontecarloNode<MontecarloData>>, system: impl SystemLike<usize> + Clone) {
+    fn execute_search_rec(  node:&mut MontecarloNode<MontecarloData>, system: impl SystemLike<usize> + Clone) {
         if system.is_finished() {
             //get final score and use it to update w
 
@@ -47,13 +47,13 @@ impl MonteCarloTreeSearch{
         new_system.evolve( chosen_action);
         //if this action has already been chosen, continue the recursion on the corresponding child
 
-        match node.children.iter().find(|child| child.data.action == chosen_action){
-            Some(mut child) => {
-                self.execute_search_rec( &mut child ,new_system );
+        match  node.children.iter_mut().find(|child| child.data.action == chosen_action){
+            Some( child) => {
+                MonteCarloTreeSearch::execute_search_rec( child ,new_system );
             },
             None =>{
                 let mut child = Box::new(MontecarloNode::<MontecarloData>::new());
-                self.execute_search_rec( &mut child ,new_system );
+                MonteCarloTreeSearch::execute_search_rec( &mut child ,new_system );
                 node.children.push(child);
             },
         }
