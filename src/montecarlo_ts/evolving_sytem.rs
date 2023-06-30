@@ -1,5 +1,12 @@
 // use hexgame_rs::hexgame::game::Game;
 
+pub trait SystemLike<Action> {
+    fn get_possible_actions(&self) -> &[Action];
+    fn evolve(&mut self, action: Action);
+    fn is_finished(&self) -> bool;
+    fn get_multiplicity(&self) -> usize;
+}
+
 pub struct Data {
     pub action: usize,
 }
@@ -74,14 +81,7 @@ impl SystemLike<usize> for IncreasingNumbers {
     }
 }
 
-pub trait SystemLike<Action> {
-    fn get_possible_actions(&self) -> &[Action];
-    fn evolve(&mut self, action: Action);
-    fn is_finished(&self) -> bool;
-    fn get_multiplicity(&self) -> usize;
-}
-
-pub enum Systems {
-    DecreasingNumbers(DecreasingNumbers),
-    IncreasingNumbers(IncreasingNumbers),
-}
+// pub enum Systems {
+//     DecreasingNumbers(DecreasingNumbers),
+//     IncreasingNumbers(IncreasingNumbers),
+// }

@@ -13,9 +13,9 @@ impl<D: Default> Default for MontecarloNode<D>{
 }
 
 pub struct MontecarloData{
-    n: isize,
-    w: f64,
-    p: f64,
+    n: isize, //number of times a node has been visited
+    w: f64, //aggregate of the final score of the node and its sub-tree
+    p: f64, // I don't know yet
     action: usize
 }
 impl Default for MontecarloData{
@@ -34,31 +34,35 @@ impl MonteCarloTreeSearch{
 
     }
     fn execute_search_rec(  node:&mut MontecarloNode<MontecarloData>, system: impl SystemLike<usize> + Clone) {
+        node.data.n += 1;
         if system.is_finished() {
-            //get final score and use it to update w
+            node.data.w = 1.0;
+        } else {
+            let actions = system.get_possible_actions();
+            let chosen_action = usize::MAX; //policy.chooseAction( actions )
+            let mut new_system = system.clone();
+            new_system.evolve( chosen_action);
+            //if this action has already been chosen, continue the recursion on the corresponding child
 
+            match  node.children.iter_mut().find(|child| child.data.action == chosen_action){
+                Some( child) => {
+                    MonteCarloTreeSearch::execute_search_rec( child ,new_system );
+                },
+                None =>{
+                    let mut child = Box::<MontecarloNode::<MontecarloData>>::default();
+                    child.data.action = chosen_action;
+                    MonteCarloTreeSearch::execute_search_rec( &mut child ,new_system );
+                    node.children.push(child);
+                },
+            }
+
+            node.data.w = node.children.iter().map(|child| child.data.w).sum();
+            // w_0, n_0, p_0
+            // for child in node.children:
+            //      update w_0, n_0, p_0
+
+            // node.data
         }
-        let actions = system.get_possible_actions();
-        let chosen_action = usize::MAX; //policy.chooseAction( actions )
-        let mut new_system = system.clone();
-        new_system.evolve( chosen_action);
-        //if this action has already been chosen, continue the recursion on the corresponding child
-
-        match  node.children.iter_mut().find(|child| child.data.action == chosen_action){
-            Some( child) => {
-                MonteCarloTreeSearch::execute_search_rec( child ,new_system );
-            },
-            None =>{
-                let mut child = Box::<MontecarloNode::<MontecarloData>>::default();
-                MonteCarloTreeSearch::execute_search_rec( &mut child ,new_system );
-                node.children.push(child);
-            },
-        }
-        // w_0, n_0, p_0
-        // for child in node.children:
-        //      update w_0, n_0, p_0
-
-        // node.data
     }
 }
 
