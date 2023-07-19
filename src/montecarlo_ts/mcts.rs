@@ -23,9 +23,14 @@ impl Default for MontecarloData{
         Self { n: 0, w: 0.0, p: 0.0 , action: usize::MAX}
     }
 }
+impl ToString for MontecarloData{
+    fn to_string(&self)-> String{
+        format!("Mcts Node\nn: {}\nw: {}\np: {}\naction: {}",self.n,self.w,self.p,self.action)
+    }
+}
 
 pub struct MonteCarloTreeSearch{
-    root: Box<MontecarloNode<MontecarloData>>,
+    pub root: Box<MontecarloNode<MontecarloData>>,
 }
 
 impl MonteCarloTreeSearch{
@@ -64,6 +69,30 @@ impl MonteCarloTreeSearch{
             // node.data
         }
     }
+    pub fn visit(&self) -> String {
+        MonteCarloTreeSearch::visit_rec(&*self.root)
+    }
+    fn visit_rec(node: &MontecarloNode<MontecarloData>) -> String {
+        let mut s: String = String::new();
+        s
+        // for _ in 0..level {
+        //     s.push_str("---");
+        // }
+        // let num = node.visit().to_string();
+        // if num != usize::MAX.to_string() {
+        //     s.push_str(&num);
+        // }
+        // s.push('\n');
+        // if node.children.is_empty() {
+        //     s
+        // } else {
+        //     for child in node.children.iter() {
+        //         s.push_str(&MonteCarloTreeSearch::visit_rec(child, level + 1));
+        //     }
+        //     s
+        // }
+    }
+
 }
 
    // let mut child_state: System = state.clone();
